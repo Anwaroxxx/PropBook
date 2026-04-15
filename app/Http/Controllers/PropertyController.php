@@ -42,11 +42,10 @@ class PropertyController extends Controller
             'description' => 'nullable|string',
             'address' => 'required|string|max:255',
             'price_per_visit' => 'required|numeric|min:0.01',
-            'image' => 'nullable|image|max:5120', // optional image, max 5MB
+            'image' => 'nullable|image|max:5120', 
         ]);
 
-        // If the user uploaded an image, store it on the public disk
-        // The stored path (e.g. "properties/abcd.jpg") will be saved to the DB.
+  
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('properties', 'public');
             $validated['image'] = $path;

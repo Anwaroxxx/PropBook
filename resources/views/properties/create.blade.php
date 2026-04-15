@@ -1,163 +1,195 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Property - PropBook</title>
-    
-    @vite(['resources/css/app.css'])
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-</head>
-<body class="bg-[#0a0a0a] text-gray-300">
-    <nav class="border-b border-gray-900 sticky top-0 z-40 bg-[#0a0a0a]">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center gap-3">
-                    <div class="text-2xl font-bold text-yellow-600">
-                        <i class="fas fa-building"></i>
-                    </div>
-                    <div>
-                        <a href="{{ route('home') }}" class="text-lg font-bold text-gray-100">PropBook</a>
-                        <p class="text-xs text-gray-500">Real Estate Booking</p>
-                    </div>
-                </div>
-
-                <div class="flex items-center gap-6">
-                    <a href="{{ route('properties.index') }}" class="text-gray-400 hover:text-yellow-600 transition">
-                        <i class="fas fa-list mr-2"></i>Properties
-                    </a>
-                    
-                    <a href="{{ route('calendar') }}" class="text-gray-400 hover:text-yellow-600 transition">
-                        <i class="fas fa-calendar mr-2"></i>Calendar
-                    </a>
-                    <div class="flex items-center gap-4">
-                        <span class="text-sm text-gray-400">{{ Auth::user()->name }}</span>
-                        <form method="POST" action="{{ route('logout') }}" class="inline">
-                            @csrf
-                            <button type="submit" class="text-gray-400 hover:text-red-500 transition">
-                                <i class="fas fa-sign-out-alt"></i>
-                            </button>
-                        </form>
-                    </div>
-                </div>
+<x-app-layout>
+    <x-slot name="header">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+                <h2 class="font-bold text-2xl text-white">Create Property</h2>
+                <p class="text-sm text-gray-400 mt-1">Add a new listing to your portfolio</p>
             </div>
+            <a href="{{ route('properties.index') }}" class="text-gray-400 hover:text-yellow-600 transition text-sm inline-flex items-center gap-2">
+                <i class="fas fa-arrow-left"></i>Back to Properties
+            </a>
         </div>
-    </nav>
+    </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="mb-8">
-                <a href="{{ route('properties.index') }}" class="text-yellow-600 hover:text-yellow-500 text-sm mb-4 inline-flex items-center gap-2">
-                    <i class="fas fa-arrow-left"></i>Back to Properties
-                </a>
-                <h1 class="text-4xl font-serif font-bold text-gray-100 mt-4">Create Property</h1>
-                <p class="text-gray-500 mt-2">Add a new listing to your portfolio</p>
-            </div>
+    <div class="py-8">
+        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
+            <form method="POST" action="{{ route('properties.store') }}" enctype="multipart/form-data" class="card p-8">
+                @csrf
 
-            <div class="card rounded p-8">
-                <form method="POST" action="{{ route('properties.store') }}" enctype="multipart/form-data" class="space-y-6">
-                    @csrf
-
+                <div class="space-y-6">
                     <div>
-                        <label for="title" class="block text-sm font-medium text-yellow-600 mb-2">Property Title</label>
-                        <input 
-                            type="text" 
-                            id="title" 
-                            name="title" 
+                        <label for="title" class="block text-sm font-medium text-gray-300 mb-2">
+                            <i class="fas fa-heading text-yellow-600 mr-2"></i>Property Title <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="title"
+                            name="title"
                             placeholder="Luxury Apartment Downtown"
-                            class="w-full px-4 py-2.5 rounded transition @error('title') border-red-600 @enderror"
+                            class="w-full @error('title') border-red-600 @enderror"
                             value="{{ old('title') }}"
+                            required
                         >
                         @error('title')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            <p class="text-red-500 text-sm mt-2 flex items-center gap-1">
+                                <i class="fas fa-exclamation-circle text-xs"></i>{{ $message }}
+                            </p>
                         @enderror
                     </div>
 
                     <div>
-                        <label for="address" class="block text-sm font-medium text-yellow-600 mb-2">Address</label>
-                        <input 
-                            type="text" 
-                            id="address" 
-                            name="address" 
+                        <label for="address" class="block text-sm font-medium text-gray-300 mb-2">
+                            <i class="fas fa-map-marker-alt text-yellow-600 mr-2"></i>Address <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="address"
+                            name="address"
                             placeholder="123 Main Street, Downtown"
-                            class="w-full px-4 py-2.5 rounded transition @error('address') border-red-600 @enderror"
+                            class="w-full @error('address') border-red-600 @enderror"
                             value="{{ old('address') }}"
+                            required
                         >
                         @error('address')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            <p class="text-red-500 text-sm mt-2 flex items-center gap-1">
+                                <i class="fas fa-exclamation-circle text-xs"></i>{{ $message }}
+                            </p>
                         @enderror
                     </div>
 
                     <div>
-                        <label for="description" class="block text-sm font-medium text-yellow-600 mb-2">Description</label>
-                        <textarea 
-                            id="description" 
-                            name="description" 
+                        <label for="description" class="block text-sm font-medium text-gray-300 mb-2">
+                            <i class="fas fa-align-left text-yellow-600 mr-2"></i>Description
+                        </label>
+                        <textarea
+                            id="description"
+                            name="description"
                             placeholder="Describe the property features and amenities..."
-                            rows="4"
-                            class="w-full px-4 py-2.5 rounded transition resize-none @error('description') border-red-600 @enderror"
+                            rows="5"
+                            class="w-full resize-none @error('description') border-red-600 @enderror"
                         >{{ old('description') }}</textarea>
                         @error('description')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            <p class="text-red-500 text-sm mt-2 flex items-center gap-1">
+                                <i class="fas fa-exclamation-circle text-xs"></i>{{ $message }}
+                            </p>
                         @enderror
+                        <p class="text-xs text-gray-500 mt-2">Provide detailed information about the property to attract more visitors</p>
                     </div>
 
                     <div>
-                        <label for="price_per_visit" class="block text-sm font-medium text-yellow-600 mb-2">Price Per Visit (MAD)</label>
+                        <label for="price_per_visit" class="block text-sm font-medium text-gray-300 mb-2">
+                            <i class="fas fa-tag text-yellow-600 mr-2"></i>Price Per Visit (MAD) <span class="text-red-500">*</span>
+                        </label>
                         <div class="relative">
-                            <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">MAD</span>
-                            <input 
-                                type="number" 
-                                id="price_per_visit" 
-                                name="price_per_visit" 
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <span class="text-gray-500 text-sm font-medium">MAD</span>
+                            </div>
+                            <input
+                                type="number"
+                                id="price_per_visit"
+                                name="price_per_visit"
                                 placeholder="0.00"
                                 step="0.01"
                                 min="0.01"
-                                class="w-full pl-12 pr-4 py-2.5 rounded transition @error('price_per_visit') border-red-600 @enderror"
+                                class="w-full pl-16 @error('price_per_visit') border-red-600 @enderror"
                                 value="{{ old('price_per_visit') }}"
+                                required
                             >
                         </div>
                         @error('price_per_visit')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            <p class="text-red-500 text-sm mt-2 flex items-center gap-1">
+                                <i class="fas fa-exclamation-circle text-xs"></i>{{ $message }}
+                            </p>
                         @enderror
                     </div>
 
                     <div>
-                        <label for="image" class="block text-sm font-medium text-yellow-600 mb-2">Property Image</label>
-                        <input type="file" id="image" name="image" accept="image/*" class="w-full text-sm text-gray-400 rounded" />
+                        <label for="image" class="block text-sm font-medium text-gray-300 mb-2">
+                            <i class="fas fa-image text-yellow-600 mr-2"></i>Property Image
+                        </label>
+                        <div class="mt-2">
+                            <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-700 border-dashed rounded-lg cursor-pointer bg-gray-800/50 hover:bg-gray-800 transition">
+                                <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <i class="fas fa-cloud-upload-alt text-2xl text-gray-500 mb-2"></i>
+                                    <p class="text-sm text-gray-400">Click to upload or drag and drop</p>
+                                    <p class="text-xs text-gray-500 mt-1">PNG, JPG, WEBP (MAX. 5MB)</p>
+                                </div>
+                                <input type="file" id="image" name="image" accept="image/*" class="hidden" />
+                            </label>
+                        </div>
                         @error('image')
-                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            <p class="text-red-500 text-sm mt-2 flex items-center gap-1">
+                                <i class="fas fa-exclamation-circle text-xs"></i>{{ $message }}
+                            </p>
                         @enderror
-                        <p class="text-xs text-gray-500 mt-1">Optional. Upload a cover photo for your listing.</p>
+                        <p class="text-xs text-gray-500 mt-2">Upload a cover photo for your listing</p>
+                        <div id="imagePreview" class="mt-3 hidden">
+                            <img id="preview" class="max-h-48 rounded-lg border border-gray-700" alt="Preview">
+                        </div>
                     </div>
+                </div>
 
-                    <div class="flex gap-4 pt-4">
-                        <a href="{{ route('properties.index') }}" class="flex-1 px-6 py-2.5 bg-gray-800 text-gray-300 rounded hover:bg-gray-700 transition font-medium text-center">
-                            Cancel
-                        </a>
-                        <button type="submit" class="flex-1 px-6 py-2.5 bg-yellow-600 text-white rounded hover:bg-yellow-700 transition font-medium">
-                            Create Listing
-                        </button>
-                    </div>
-                </form>
-            </div>
+                <div class="flex gap-4 pt-6 mt-6 border-t border-gray-800">
+                    <a href="{{ route('properties.index') }}" class="flex-1 btn-secondary text-center">
+                        Cancel
+                    </a>
+                    <button type="submit" class="flex-1 btn-primary">
+                        <i class="fas fa-plus mr-2"></i>Create Listing
+                    </button>
+                </div>
+            </form>
 
-            <div class="mt-8 card p-6 rounded text-sm text-gray-400">
-                <p class="font-medium text-gray-300 mb-3"><i class="fas fa-lightbulb mr-2 text-yellow-600"></i>Listing Tips</p>
-                <ul class="space-y-2 text-xs">
-                    <li>• Write a clear, compelling title</li>
-                    <li>• Provide complete and detailed address</li>
-                    <li>• Highlight features and amenities in description</li>
-                    <li>• Set competitive pricing based on market</li>
+            {{-- Tips Card --}}
+            <div class="card mt-6 p-6">
+                <h3 class="font-bold text-white mb-4 flex items-center gap-2">
+                    <i class="fas fa-lightbulb text-yellow-600"></i>Listing Tips
+                </h3>
+                <ul class="space-y-3 text-sm text-gray-300">
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-check text-green-500 mt-0.5"></i>
+                        <span>Write a clear, compelling title that highlights key features</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-check text-green-500 mt-0.5"></i>
+                        <span>Provide complete and accurate address information</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-check text-green-500 mt-0.5"></i>
+                        <span>Highlight unique features and amenities in the description</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-check text-green-500 mt-0.5"></i>
+                        <span>Set competitive pricing based on market research</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-check text-green-500 mt-0.5"></i>
+                        <span>Upload high-quality photos to attract more visitors</span>
+                    </li>
                 </ul>
             </div>
         </div>
     </div>
 
-    <footer class="border-t border-gray-900 text-gray-500 py-6 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs">
-            <p>&copy; 2026 PropBook. All rights reserved.</p>
-        </div>
-    </footer>
-</body>
-</html>
+    @push('scripts')
+    <script>
+        // Image preview
+        const imageInput = document.getElementById('image');
+        const imagePreview = document.getElementById('imagePreview');
+        const preview = document.getElementById('preview');
+
+        if (imageInput) {
+            imageInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
+                        imagePreview.classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+    </script>
+    @endpush
+</x-app-layout>

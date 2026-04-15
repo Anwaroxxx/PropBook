@@ -16,17 +16,15 @@ class PaymentController extends Controller
         Stripe::setApiKey(config('stripe.sk'));
     }
 
-    /**
-     * Create a Stripe checkout session for a visit.
-     */
+
     public function createCheckoutSession(Request $request, Visit $visit)
     {
-        // Check ownership
+        // Check ownership dial checkout
         if ($visit->user_id !== Auth::id()) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
-        // Only allow pending visits to be paid
+        // Only allow pending visits bash ytkhlsso cz obvs u cant tkhlss shi haja already mkhlssa
         if (!$visit->isPending()) {
             return response()->json(['error' => 'Visit is not pending'], 400);
         }
@@ -52,7 +50,6 @@ class PaymentController extends Controller
                 'cancel_url' => url('/payment/cancel'),
             ]);
 
-            // Store session ID in visit
             $visit->update(['stripe_session_id' => $checkoutSession->id]);
 
             return response()->json([
@@ -68,9 +65,6 @@ class PaymentController extends Controller
         }
     }
 
-    /**
-     * Handle successful payment.
-     */
     public function paymentSuccess(Request $request)
     {
         $sessionId = $request->query('session_id');

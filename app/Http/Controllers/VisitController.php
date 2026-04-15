@@ -51,8 +51,8 @@ class VisitController extends Controller
     {
         $validated = $request->validate([
             'property_id' => 'required|exists:properties,id',
-            'start_time' => 'required|date|after:now',
-            'end_time' => 'required|date|after:start_time',
+            'start_time' => 'required|date_format:Y-m-d\TH:i|after:now',
+            'end_time' => 'required|date_format:Y-m-d\TH:i|after:start_time',
         ]);
 
         $validated['user_id'] = Auth::id();
